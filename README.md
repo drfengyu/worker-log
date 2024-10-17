@@ -1,10 +1,3 @@
----
-created: 2024-10-17T11:37:30 (UTC +08:00)
-tags: []
-source: https://developers.cloudflare.com/workers/wrangler/configuration/
-author: 
----
-
 # 配置 - Wrangler
 
 > ## Excerpt
