@@ -4,12 +4,12 @@ export default {
     try {
       if (clonedRequest.method === 'POST') {
         const requestBody = await clonedRequest.json();
-        console.log(`${requestBody}`);
+        
 
         if (requestBody != null && requestBody.messages != null) {
           // 提取 message 字段
           const message = requestBody.messages;
-
+          
           // 使用当前时间作为键
           const now = new Date();
           const year = now.getFullYear();
@@ -23,6 +23,7 @@ export default {
           try {
             // 将 message 序列化为 JSON 字符串
             const messageString = JSON.stringify(message);
+            console.log(`${messageString}`);
             // 使用 Cloudflare Workers 的 KV API 直接存储 message 值
             await env.WORKER_LOG.put(logKey, messageString, { expirationTtl: 60 * 60 * 24 * 7 });
             console.log('Message stored successfully');
