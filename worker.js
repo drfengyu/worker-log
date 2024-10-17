@@ -4,8 +4,10 @@ export default {
     try {
       if (clonedRequest.method === 'POST') {
         const requestBody = await clonedRequest.json();
-        
-
+        const url = new URL(request.url);
+        if (url.pathname === '/') {
+            return await handleGetLogs(env);
+          }
         if (requestBody != null && requestBody.messages != null) {
           // 提取 message 字段
           const message = requestBody.messages;
@@ -46,4 +48,47 @@ export default {
       return new Response('Internal Server Error', { status: 500 });
     }
   }
+
+async function handleGetLogs(env) {
+  try {
+    const logs = [];
+    // 从 KV 中获取所有键
+    for await (const key of env.WORKER_LOG.list()) {
+      const value = await env.WORKER_LOG.get(key.name);
+      logs.push({ key: key.name, value });
+    }
+
+    // 生成 HTML
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Logs</title>
+      </head>
+      <body>
+        <h1>Key-Value Logs</h1>
+        <table border="1">
+          <tr>
+            <th>Key</th>
+            <th>Value</th>
+          </tr>
+          ${logs.map(log => `
+            <tr>
+              <td>${log.key}</td>
+              <td>${log.value}</td>
+            </tr>
+          `).join('')}
+        </table>
+      </body>
+      </html>
+    `;
+    
+    return new Response(html, {
+      headers: { 'Content-Type': 'text/html' },
+    });
+  } catch (error) {
+    console.error(`Error retrieving logs: ${error.message}`);
+    return new Response('Internal Server Error', { status: 500 });
+  }
+
 };
