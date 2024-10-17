@@ -11,7 +11,7 @@ export default {
 
       // 提取 content 值
       const content = data.content;
-
+      if(content!=null){
       // 创建一个唯一的键，使用日期格式
       const logKey = `log-${Date.now()}`;
 
@@ -32,4 +32,5 @@ export default {
       return new Response('Internal Server Error', { status: 500 });
     }
   }
+  }
 };
