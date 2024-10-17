@@ -90,5 +90,5 @@ async function handleGetLogs(env) {
     console.error(`Error retrieving logs: ${error.message}`);
     return new Response('Internal Server Error', { status: 500 });
   }
-
+}
 };
