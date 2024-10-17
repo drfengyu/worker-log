@@ -1,14 +1,9 @@
 name = "your-worker-name" # 你的 Worker 的名称
 
-type = "javascript" # Worker 的类型，对于 JavaScript Worker，这里填写 "javascript"
-
 [env]
 # 在这里设置环境变量
 # 例如：
 # WORKER_LOG = "your-kv-binding-name"
-
-[workers]
-# Worker 的配置
 [workers.routes]
 # 路由配置，指定 Worker 应响应对哪些路径的请求
 # 例如：
