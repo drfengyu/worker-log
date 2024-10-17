@@ -1,4 +1,6 @@
 name = "aged-dust-73a9"
+entry-point = "worker.js"
+
 [observability]
 enabled = true
 head_sampling_rate = 1
