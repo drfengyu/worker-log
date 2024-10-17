@@ -1,5 +1,4 @@
 name = "your-worker-name" # 你的 Worker 的名称
-test
 [env]
 # 在这里设置环境变量
 # 例如：
