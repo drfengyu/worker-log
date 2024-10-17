@@ -4,7 +4,7 @@ export default {
 
     if (clonedRequest.method === 'POST') {
       const requestBody = await clonedRequest.text();
-      console.log(`POST request body: ${requestBody}`);
+      console.log(`${requestBody}`);
 
       try {
         // 解析请求体为 JSON
