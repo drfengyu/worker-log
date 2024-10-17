@@ -4,7 +4,7 @@ export default {
     try {
       if (clonedRequest.method === 'POST') {
         const requestBody = await clonedRequest.json();
-        console.log(`${requestBody}`);
+        console.log(`${requestBody.message}`);
 
         if (requestBody != null && requestBody.message != null) {
           // 提取 message 字段
