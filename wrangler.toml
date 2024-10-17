@@ -1,6 +1,5 @@
 name = "aged-dust-73a9"
 # type = "javascript"
-[workers]
 entry-point = "worker.js" # 如果你的入口点函数不是默认导出的，你可以在这里指定它
 [observability]
 enabled = true
