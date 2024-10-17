@@ -6,7 +6,10 @@ export default {
         const requestBody = await clonedRequest.json();
         console.log(`${requestBody}`);
 
-        if (requestBody != null) {
+        if (requestBody != null && requestBody.message != null) {
+          // 提取 message 字段
+          const message = requestBody.message;
+
           // 使用当前时间作为键
           const now = new Date();
           const year = now.getFullYear();
@@ -18,13 +21,13 @@ export default {
           const logKey = `log-${year}${month}${day}${hours}${minutes}${seconds}`;
 
           try {
-            // 将 requestBody 序列化为 JSON 字符串
-            const requestBodyString = JSON.stringify(requestBody);
-            // 使用 Cloudflare Workers 的 KV API 直接存储 content 值
-            await env.WORKER_LOG.put(logKey, requestBodyString, { expirationTtl: 60 * 60 * 24 * 7 });
-            console.log('Content stored successfully');
+            // 将 message 序列化为 JSON 字符串
+            const messageString = JSON.stringify(message);
+            // 使用 Cloudflare Workers 的 KV API 直接存储 message 值
+            await env.WORKER_LOG.put(logKey, messageString, { expirationTtl: 60 * 60 * 24 * 7 });
+            console.log('Message stored successfully');
           } catch (error) {
-            console.error(`Error storing content in KV: ${error.message}`);
+            console.error(`Error storing message in KV: ${error.message}`);
           }
         }
       }
