@@ -6,10 +6,6 @@ export default {
         const requestBody = await clonedRequest.json();
         console.log(`${requestBody}`);
 
-        // 解析请求体为 JSON
-        //const data = JSON.parse(requestBody);
-        //const content = data.content;
-
         if (requestBody != null) {
           // 使用当前时间作为键
           const now = new Date();
@@ -22,8 +18,10 @@ export default {
           const logKey = `log-${year}${month}${day}${hours}${minutes}${seconds}`;
 
           try {
+            // 将 requestBody 序列化为 JSON 字符串
+            const requestBodyString = JSON.stringify(requestBody);
             // 使用 Cloudflare Workers 的 KV API 直接存储 content 值
-            await env.WORKER_LOG.put(logKey, requestBody, { expirationTtl: 60 * 60 * 24 * 7 });
+            await env.WORKER_LOG.put(logKey, requestBodyString, { expirationTtl: 60 * 60 * 24 * 7 });
             console.log('Content stored successfully');
           } catch (error) {
             console.error(`Error storing content in KV: ${error.message}`);
@@ -44,5 +42,3 @@ export default {
     }
   }
 };
-
-
