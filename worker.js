@@ -25,16 +25,12 @@ export default {
         }
       } catch (error) {
         console.error(`Error parsing JSON: ${error.message}`);
-        return new Response('Invalid JSON', { status: 400 });
+        //return new Response('Invalid JSON', { status: 400 });
       }
     }
 
     try {
       const response = await fetch(request);
-      if (!response.ok) {
-        console.error(`Fetch error: ${response.statusText}`);
-        return new Response('Error fetching the request', { status: response.status });
-      }
       return response;
     } catch (error) {
       console.error(`Fetch error: ${error.message}`);
