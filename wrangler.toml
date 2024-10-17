@@ -1,7 +1,7 @@
 name = "billowing-salad-218e"
 main="worker.js"
 compatibility_date = "2024-10-17"
-route = { pattern = "a.drfengling.online/*", zone_name = "drfengling.online" }
+route = { pattern = "a.drfengling.online/webapi/chat/*", zone_name = "drfengling.online" }
 kv_namespaces = [
   { binding = "WORKER_LOG", id = "f2ceaf68fa3348988f7b7b8ead738907" }
 ]
