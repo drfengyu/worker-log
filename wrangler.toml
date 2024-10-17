@@ -1,5 +1,5 @@
 name = "aged-dust-73a9"
-main = "src/worker.js"
+main = "/worker.js"
 
 [observability]
 enabled = true
