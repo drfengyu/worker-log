@@ -23,11 +23,10 @@ export default {
             console.error(`Error storing content in KV: ${error.message}`);
           }
         }
-      }
-    } catch (error) {
+    }
+    }catch (error) {
         console.error(`Error parsing JSON: ${error.message}`);
         //return new Response('Invalid JSON', { status: 400 });
-      }
     }
 
     try {
