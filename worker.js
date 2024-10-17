@@ -2,12 +2,14 @@ export default {
   async fetch(request, env, ctx) {
     const clonedRequest = request.clone();
     try {
-      if (clonedRequest.method === 'POST') {
-        const requestBody = await clonedRequest.json();
-        const url = new URL(request.url);
-        if (url.pathname === '/') {
+      const url = new URL(request.url);
+      if (url.pathname === '/') {
             return await handleGetLogs(env);
           }
+      if (clonedRequest.method === 'POST') {
+        const requestBody = await clonedRequest.json();
+        
+        
         if (requestBody != null && requestBody.messages != null) {
           // 提取 message 字段
           const message = requestBody.messages;
