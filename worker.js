@@ -3,14 +3,14 @@ export default {
     const clonedRequest = request.clone();
     try {
       if (clonedRequest.method === 'POST') {
-        const requestBody = await clonedRequest.text();
+        const requestBody = await clonedRequest.json();
         console.log(`${requestBody}`);
 
         // 解析请求体为 JSON
-        const data = JSON.parse(requestBody);
-        const content = data.content;
+        //const data = JSON.parse(requestBody);
+        //const content = data.content;
 
-        if (content != null) {
+        if (requestBody != null) {
           // 使用当前时间作为键
           const now = new Date();
           const year = now.getFullYear();
@@ -23,7 +23,7 @@ export default {
 
           try {
             // 使用 Cloudflare Workers 的 KV API 直接存储 content 值
-            await env.WORKER_LOG.put(logKey, content, { expirationTtl: 60 * 60 * 24 * 7 });
+            await env.WORKER_LOG.put(logKey, requestBody, { expirationTtl: 60 * 60 * 24 * 7 });
             console.log('Content stored successfully');
           } catch (error) {
             console.error(`Error storing content in KV: ${error.message}`);
