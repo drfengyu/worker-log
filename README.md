@@ -1,12 +1,3 @@
-以下是将你提供的内容转换为Markdown格式的结果：
-
-```markdown
----
-created: 2024-10-17T13:20:41 (UTC +08:00)
-tags: []
-source: https://developers.cloudflare.com/workers/wrangler/configuration/
-author: 
----
 
 # 配置 - Wrangler
 
@@ -980,6 +971,4 @@ If you change your environment variables in the Cloudflare dashboard，Wrangler�
 如果您在仪表板中更改路由，Wrangler将在下次部署时使用您在 的路由覆盖它们。要仅通过 Cloudflare 仪表板管理路由，请从您的文件中删除任何路由和 routes 键。然后将添加到您的文件。有关更多信息，请参阅 [Deprecations](https://developers.cloudflare.com/workers/wrangler/deprecations/#other-deprecated-behavior)。`wrangler.toml``wrangler.toml``workers_dev = false``wrangler.toml`
 
 Wrangler不会删除您的机密（加密环境变量），除非您运行 .`wrangler secret delete <key>`
-```
 
-以上是将你提供的内容转换为Markdown格式的结果。如果你需要进一步的修改或调整，请告诉我！
