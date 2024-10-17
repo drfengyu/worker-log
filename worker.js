@@ -56,7 +56,8 @@ async function handleGetLogs(env) {
   try {
     const logs = [];
     // 从 KV 中获取所有键
-    for await (const key of env.WORKER_LOG.list()) {
+    const list = await env.WORKER_LOG.list();
+    for (const key of list.keys) {
       const value = await env.WORKER_LOG.get(key.name);
       logs.push({ key: key.name, value });
     }
