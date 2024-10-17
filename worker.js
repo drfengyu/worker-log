@@ -1,12 +1,12 @@
 export default {
   async fetch(request, env, ctx) {
     const clonedRequest = request.clone();
-
+    try {
     if (clonedRequest.method === 'POST') {
       const requestBody = await clonedRequest.text();
       console.log(`${requestBody}`);
 
-      try {
+      
         // 解析请求体为 JSON
         const data = JSON.parse(requestBody);
         const content = data.content;
@@ -23,7 +23,8 @@ export default {
             console.error(`Error storing content in KV: ${error.message}`);
           }
         }
-      } catch (error) {
+      }
+    } catch (error) {
         console.error(`Error parsing JSON: ${error.message}`);
         //return new Response('Invalid JSON', { status: 400 });
       }
