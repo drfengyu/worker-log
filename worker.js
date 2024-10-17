@@ -4,11 +4,11 @@ export default {
     try {
       if (clonedRequest.method === 'POST') {
         const requestBody = await clonedRequest.json();
-        console.log(`${requestBody.message}`);
+        console.log(`${requestBody}`);
 
-        if (requestBody != null && requestBody.message != null) {
+        if (requestBody != null && requestBody.messages != null) {
           // 提取 message 字段
-          const message = requestBody.message;
+          const message = requestBody.messages;
 
           // 使用当前时间作为键
           const now = new Date();
