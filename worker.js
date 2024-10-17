@@ -48,6 +48,7 @@ export default {
       return new Response('Internal Server Error', { status: 500 });
     }
   }
+};
 
 async function handleGetLogs(env) {
   try {
@@ -91,4 +92,3 @@ async function handleGetLogs(env) {
     return new Response('Internal Server Error', { status: 500 });
   }
 }
-};
