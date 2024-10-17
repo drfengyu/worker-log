@@ -1,5 +1,5 @@
 name = "billowing-salad-218e"
-main="/worker.js"
+main="worker.js"
 compatibility_date = "2024-10-17"
 route = { pattern = "a.drfengling.online/*", zone_name = "drfengling.online" }
 kv_namespaces = [
