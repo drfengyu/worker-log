@@ -12,9 +12,7 @@ export default {
         
         if (requestBody != null && requestBody.messages != null) {
           // 提取 message 字段
-          const message = requestBody.messages;
-          // 提取最后一条用户消息的内容
-          last_user_message = message[-1]['role'] == 'user' ? message[-1]['content'] : undefined;
+          last_user_message = requestBody.messages[-1]['role'] == 'user' ? requestBody.messages[-1]['content'] : undefined;
           // 使用当前时间作为键
           const now = new Date();
           const year = now.getFullYear();
