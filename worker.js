@@ -154,11 +154,12 @@ function generateMarkdownFromMessage(message) {
 
     // 循环提取所有匹配的内容
     while ((match = regex.exec(message)) !== null) {
-        // 将匹配的内容添加到结果数组中
-        result.push(match[1].replace(/\\n/g, '\n').replace(/\\\"/g, '"')); // 替换换行符和引号
+        // 替换换行符和引号，去掉多余空格
+        const cleanedData = match[1].replace(/\\n/g, '\n').replace(/\\\"/g, '"').trim();
+        result.push(cleanedData);
     }
 
     // 拼接成 Markdown 格式的文本
-    const markdownText = result.join('\n');
+    const markdownText = result.join('\n\n'); // 每个段落之间加两个换行
     return markdownText;
 }
