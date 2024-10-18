@@ -6,7 +6,7 @@ export default {
     const year = now.getFullYear();
     const month = (now.getMonth() + 1).toString().padStart(2, '0');
     const day = now.getDate().toString().padStart(2, '0');
-    const hours = (now.getHours() + 8).toString().padStart(2, '0'); // Adjust for GMT+8
+    const hours = now.getHours().toString().padStart(2, '0'); // Adjust for GMT+8
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
     let logKey = `${year}.${month}.${day}.${hours}.${minutes}.${seconds}`;
@@ -31,11 +31,11 @@ export default {
           }
           try {
             // 将 message 序列化为 JSON 字符串
-            const messageString = JSON.stringify(last_user_message);
-            console.log(`${messageString}`);
+            //const messageString = JSON.stringify(last_user_message);
+            console.log(`${last_user_message}`);
             // 使用 Cloudflare Workers 的 KV API 直接存储 message 值
-            if(messageString){
-              await env.WORKER_LOG.put(logKey, messageString, { expirationTtl: 60 * 60 * 24 * 7 });
+            if(last_user_message){
+              await env.WORKER_LOG.put(logKey, last_user_message, { expirationTtl: 60 * 60 * 24 * 7 });
               console.log('Message Requested successfully');
             }
             
