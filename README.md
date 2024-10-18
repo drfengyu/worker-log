@@ -1,5 +1,5 @@
 
-# CloudFlare Workers配置 - Wrangler
+# CloudFlare Worker配置 - Wrangler
 
 > ## Excerpt
 > Use a `wrangler.toml` configuration file to customize the development and deployment setup for your Worker project and other Developer Platform products.
