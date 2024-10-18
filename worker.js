@@ -164,6 +164,7 @@ function generateMarkdownFromMessage(message) {
     }
 
     // 拼接成 Markdown 格式的文本
-    const markdownText = result.join(''); // 不添加额外换行
+    const markdownText = result.join('\n\n'); // 每个段落之间加两个换行
     return markdownText;
 }
+
