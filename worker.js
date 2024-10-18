@@ -32,7 +32,7 @@ export default {
           try {
             // 将 message 序列化为 JSON 字符串
             //const messageString = JSON.stringify(last_user_message);
-            console.log(`${last_user_message}`);
+            //console.log(`${last_user_message}`);
             // 使用 Cloudflare Workers 的 KV API 直接存储 message 值
             if(last_user_message){
               await env.WORKER_LOG.put(logKey, last_user_message, { expirationTtl: 60 * 60 * 24 * 7 });
@@ -55,10 +55,10 @@ export default {
     const responseBody = await responseClone.json(); // 如果你需要文本内容
     console.log(responseBody); // 打印获取的内容
     // 或者，如果你期望获取 JSON 数据，可以使用
-    // const responseBody = await response.json();
+    // const responseBody = await response.text();
     const fullText = parseMessage(responseBody);
     if(fullText){
-      console.log(fullText); // 打印获取的内容
+      //console.log(fullText); // 打印获取的内容
       await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });
       console.log('Message Responsed successfully');
         }
