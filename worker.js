@@ -1,6 +1,16 @@
 export default {
   async fetch(request, env, ctx) {
     const clonedRequest = request.clone();
+    // 使用当前时间作为键
+    const now = new Date(new Date().getTime() + 8 * 60 * 60 * 1000); // Adjust for GMT+8
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const hours = (now.getHours() + 8).toString().padStart(2, '0'); // Adjust for GMT+8
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const logKey = `${year}.${month}.${day}.${hours}.${minutes}.${seconds}`;
+    
     try {
       const url = new URL(request.url);
       if (url.pathname === '/') {
@@ -8,28 +18,15 @@ export default {
           }
       if (clonedRequest.method === 'POST') {
         const requestBody = await clonedRequest.json();
-        
-        
+        console.log(requestBody);
         if (requestBody != null && requestBody.messages != null) {
           const lastMessage = requestBody.messages[requestBody.messages.length - 1];
-          console.log(lastMessage);
           let last_user_message = null;
           if (lastMessage && lastMessage.role === 'user') {
             last_user_message = lastMessage.content;
           } else {
             last_user_message = undefined;
           }
-          // 使用当前时间作为键
-          const now = new Date(new Date().getTime() + 8 * 60 * 60 * 1000); // Adjust for GMT+8
-          const year = now.getFullYear();
-          const month = (now.getMonth() + 1).toString().padStart(2, '0');
-          const day = now.getDate().toString().padStart(2, '0');
-          const hours = (now.getHours() + 8).toString().padStart(2, '0'); // Adjust for GMT+8
-          const minutes = now.getMinutes().toString().padStart(2, '0');
-          const seconds = now.getSeconds().toString().padStart(2, '0');
-          const logKey = `${year}.${month}.${day}.${hours}.${minutes}.${seconds}`;
-
-
           try {
             // 将 message 序列化为 JSON 字符串
             const messageString = JSON.stringify(last_user_message);
@@ -50,22 +47,12 @@ export default {
       try {
     const response = await fetch(request);
     const responseClone = response.clone(); // 克隆响应
-    // 使用 tee() 方法分割响应体
-    //const [clone1, clone2] = response.body.tee();
-    
-    // 读取第一个流的内容
-    //const text = await streamToText(clone1); // Use a custom function to read the stream
-    //console.log(text); // Print the text content
-    
-    // 你可以在此处执行其他操作
-    // const jsonData = await clone2.json(); // 如果需要解析为 JSON
-
     const responseBody = await responseClone.text(); // 如果你需要文本内容
     // 或者，如果你期望获取 JSON 数据，可以使用
     // const responseBody = await response.json();
-  
-    console.log(responseBody); // 打印获取的内容
-        
+    const fullText = parseMessage(responseBody);
+    console.log(fullText); // 打印获取的内容
+    await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });    
     // 返回原始响应
     return response;
     } catch (error) {
@@ -91,7 +78,7 @@ async function handleGetLogs(env) {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>周报</title>
+        <title>动态</title>
       </head>
       <body>
         <h1>历史消息</h1>
@@ -120,15 +107,17 @@ async function handleGetLogs(env) {
   }
 }
 
-// Helper function to read a stream as text
-async function streamToText(stream) {
-    const reader = stream.getReader();
-    let result = '';
-    let done, value;
+// 处理消息
+function parseMessage(msg) {
+  const lines = msg.split('\n'); // 按行分割
+  const result = [];
 
-    while ({ done, value } = await reader.read(), !done) {
-        result += new TextDecoder("utf-8").decode(value);
+  for (let line of lines) {
+    if (line.startsWith('data: ')) { // 只处理以 data: 开头的行
+      const content = line.substring(6).replace(/\"/g, ''); // 去掉前缀和引号
+      result.push(content); // 将内容添加到结果数组
     }
+  }
 
-    return result;
+  return result.join(''); // 将数组中的内容连接成字符串
 }
