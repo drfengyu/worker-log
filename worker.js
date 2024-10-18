@@ -52,7 +52,7 @@ export default {
       try {
     const response = await fetch(request);
     const responseClone = response.clone(); // 克隆响应
-    const responseBody = await responseClone.text(); // 如果你需要文本内容
+    const responseBody = await responseClone.json(); // 如果你需要文本内容
     console.log(responseBody); // 打印获取的内容
     // 或者，如果你期望获取 JSON 数据，可以使用
     // const responseBody = await response.json();
