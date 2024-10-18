@@ -67,14 +67,14 @@ async function handleGetLogs(env) {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Logs</title>
+        <title>日志</title>
       </head>
       <body>
-        <h1>Key-Value Logs</h1>
+        <h1>过去时间的日志记录</h1>
         <table border="1">
           <tr>
-            <th>Key</th>
-            <th>Value</th>
+            <th>时间</th>
+            <th>值</th>
           </tr>
           ${logs.map(log => `
             <tr>
@@ -88,7 +88,7 @@ async function handleGetLogs(env) {
     `;
     
     return new Response(html, {
-      headers: { 'Content-Type': 'text/html' },
+      headers: { 'Content-Type': 'text/html; charset=UTF-8' },
     });
   } catch (error) {
     console.error(`Error retrieving logs: ${error.message}`);
