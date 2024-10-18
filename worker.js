@@ -53,11 +53,12 @@ export default {
     const response = await fetch(request);
     const responseClone = response.clone(); // 克隆响应
     const responseBody = await responseClone.text(); // 如果你需要文本内容
+    console.log(responseBody); // 打印获取的内容
     // 或者，如果你期望获取 JSON 数据，可以使用
     // const responseBody = await response.json();
     const fullText = parseMessage(responseBody);
-    console.log(fullText); // 打印获取的内容
     if(fullText){
+      console.log(fullText); // 打印获取的内容
       await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });
       console.log('Message Responsed successfully');
         }
@@ -122,7 +123,7 @@ function parseMessage(msg) {
 
   for (let line of lines) {
     if (line.startsWith('data: ')) { // 只处理以 data: 开头的行
-      const content = line.substring(6).replace(/\"/g, ''); // 去掉前缀和引号
+      const content = line.substring(6).replace(/\"/g, '').replace('stop',''); // 去掉前缀和引号
       result.push(content); // 将内容添加到结果数组
     }
   }
