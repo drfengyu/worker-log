@@ -146,19 +146,18 @@ async function handleGetLogs(env) {
   }
 }
 
-function parseMessage(msg) {
-  const lines = msg.split('\n'); // 按行分割
-  const result = [];
+function parseMessage(message) {
+    // 使用正则表达式匹配所有 event 为 text 的 data 值
+    const regex = /event: text\s*data: "(.*?)"/g;
+    let match;
+    let result = [];
 
-  for (let line of lines) {
-    if (line.startsWith('data: ')) { 
-      const content = line.substring(6)
-        .replace(/\\/g, '') // 移除转义符
-        .replace(/\"/g, '') // 移除引号
-        .replace('stop', ''); // 移除 'stop'
-      result.push(content);
+    // 循环提取所有匹配的内容
+    while ((match = regex.exec(message)) !== null) {
+        result.push(match[1]); // match[1] 是 data 的内容
     }
-  }
 
-  return result.join('\n'); // 保持换行符
+    // 拼接成 Markdown 格式的文本
+    const markdownText = result.join('\n');
+    return markdownText;
 }
