@@ -43,7 +43,7 @@ export default {
 
       try {
     const response = await fetch(request);
-    
+    const responseClone = response.clone(); // 克隆响应
     // 使用 tee() 方法分割响应体
     //const [clone1, clone2] = response.body.tee();
     
@@ -54,7 +54,7 @@ export default {
     // 你可以在此处执行其他操作，例如解析 JSON
     // const jsonData = await clone2.json(); // 如果需要解析为 JSON
 
-    const responseBody = await response.text(); // 如果你需要文本内容
+    const responseBody = await responseClone.text(); // 如果你需要文本内容
     // 或者，如果你期望获取 JSON 数据，可以使用
     // const responseBody = await response.json();
   
