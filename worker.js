@@ -11,8 +11,12 @@ export default {
         
         
         if (requestBody != null && requestBody.messages != null) {
-          // 提取 message 字段
-          last_user_message = requestBody.messages[-1]['role'] == 'user' ? requestBody.messages[-1]['content'] : undefined;
+          const lastMessage = requestBody.messages[requestBody.messages.length - 1];
+          if (lastMessage && lastMessage.role === 'user') {
+            last_user_message = lastMessage.content;
+          } else {
+            last_user_message = undefined;
+          }
           // 使用当前时间作为键
           const now = new Date();
           const year = now.getFullYear();
