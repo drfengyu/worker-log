@@ -48,8 +48,8 @@ export default {
     const [clone1, clone2] = response.body.tee();
     
     // 读取第一个流的内容
-    const text = await clone1.text(); // 读取文本内容
-    console.log(text); // 打印响应体内容
+    const text = await streamToText(clone1); // Use a custom function to read the stream
+    console.log(text); // Print the text content
     
     // 你可以在此处执行其他操作，例如解析 JSON
     // const jsonData = await clone2.json(); // 如果需要解析为 JSON
@@ -106,4 +106,17 @@ async function handleGetLogs(env) {
     console.error(`Error retrieving logs: ${error.message}`);
     return new Response('Internal Server Error', { status: 500 });
   }
+}
+
+// Helper function to read a stream as text
+async function streamToText(stream) {
+    const reader = stream.getReader();
+    let result = '';
+    let done, value;
+
+    while ({ done, value } = await reader.read(), !done) {
+        result += new TextDecoder("utf-8").decode(value);
+    }
+
+    return result;
 }
