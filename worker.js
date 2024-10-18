@@ -57,7 +57,7 @@ export default {
     // const responseBody = await response.json();
     const fullText = parseMessage(responseBody);
     console.log(fullText); // 打印获取的内容
-    if(messageString){
+    if(fullText){
       await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });
       console.log('Message Responsed successfully');
         }
