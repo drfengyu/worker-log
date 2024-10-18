@@ -55,7 +55,7 @@ export default {
     // 或者，如果你期望获取 JSON 数据，可以使用
     const responseBody = await responseClone.text();
     console.log(responseBody); // 打印获取的内容
-    const fullText = parseMessage(responseBody);
+    const fullText = generateMarkdownFromMessage(responseBody);
     if(fullText){
       //console.log(fullText); // 打印获取的内容
       await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });
@@ -146,7 +146,7 @@ async function handleGetLogs(env) {
   }
 }
 
-function parseMessage(message) {
+function generateMarkdownFromMessage(message) {
     // 使用正则表达式匹配所有 event 为 text 的 data 值
     const regex = /event: text\s*data: "(.*?)"/g;
     let match;
@@ -154,7 +154,8 @@ function parseMessage(message) {
 
     // 循环提取所有匹配的内容
     while ((match = regex.exec(message)) !== null) {
-        result.push(match[1]); // match[1] 是 data 的内容
+        // 将匹配的内容添加到结果数组中
+        result.push(match[1].replace(/\\n/g, '\n').replace(/\\\"/g, '"')); // 替换换行符和引号
     }
 
     // 拼接成 Markdown 格式的文本
