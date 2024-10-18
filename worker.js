@@ -41,14 +41,26 @@ export default {
       //return new Response('Invalid JSON', { status: 400 });
     }
 
-    try {
-      const response = await fetch(request);
-      console.log(`${JSON.stringify(response.text())}`);
-      return response;
+      try {
+    const response = await fetch(request);
+    
+    // 使用 tee() 方法分割响应体
+    const [clone1, clone2] = response.body.tee();
+    
+    // 读取第一个流的内容
+    const text = await clone1.json(); // 读取文本内容
+    console.log(text); // 打印响应体内容
+    
+    // 你可以在此处执行其他操作，例如解析 JSON
+    // const jsonData = await clone2.json(); // 如果需要解析为 JSON
+    
+    // 返回原始响应
+    return response;
     } catch (error) {
-      console.error(`Fetch error: ${error.message}`);
-      return new Response('Internal Server Error', { status: 500 });
+    console.error(`Fetch error: ${error.message}`);
+    return new Response('Internal Server Error', { status: 500 });
     }
+
   }
 };
 
