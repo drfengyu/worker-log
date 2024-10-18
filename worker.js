@@ -48,7 +48,7 @@ export default {
     const [clone1, clone2] = response.body.tee();
     
     // 读取第一个流的内容
-    const text = await clone1.json(); // 读取文本内容
+    const text = await clone1.text(); // 读取文本内容
     console.log(text); // 打印响应体内容
     
     // 你可以在此处执行其他操作，例如解析 JSON
