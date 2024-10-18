@@ -51,7 +51,7 @@ export default {
     //const text = await streamToText(clone1); // Use a custom function to read the stream
     //console.log(text); // Print the text content
     
-    // 你可以在此处执行其他操作，例如解析 JSON
+    // 你可以在此处执行其他操作
     // const jsonData = await clone2.json(); // 如果需要解析为 JSON
 
     const responseBody = await responseClone.text(); // 如果你需要文本内容
