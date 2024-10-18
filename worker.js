@@ -54,6 +54,7 @@ export default {
     const responseClone = response.clone(); 
     // 或者，如果你期望获取 JSON 数据，可以使用
     const responseBody = await responseClone.text();
+    console.log(responseBody); // 打印获取的内容
     const fullText = parseMessage(responseBody);
     if(fullText){
       //console.log(fullText); // 打印获取的内容
