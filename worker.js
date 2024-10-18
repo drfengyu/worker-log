@@ -9,7 +9,7 @@ export default {
     const hours = (now.getHours() + 8).toString().padStart(2, '0'); // Adjust for GMT+8
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
-    const logKey = `${year}.${month}.${day}.${hours}.${minutes}.${seconds}`;
+    let logKey = `${year}.${month}.${day}.${hours}.${minutes}.${seconds}`;
     
     try {
       const url = new URL(request.url);
@@ -18,6 +18,8 @@ export default {
           }
       if (clonedRequest.method === 'POST') {
         const requestBody = await clonedRequest.json();
+        const aimodel=requestBody.model;
+        logKey=`${year}.${month}.${day}.${hours}.${minutes}.${seconds}.${aimodel}`;
         console.log(requestBody);
         if (requestBody != null && requestBody.messages != null) {
           const lastMessage = requestBody.messages[requestBody.messages.length - 1];
