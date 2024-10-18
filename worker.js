@@ -20,14 +20,15 @@ export default {
             last_user_message = undefined;
           }
           // 使用当前时间作为键
-          const now = new Date();
+          const now = new Date(new Date().getTime() + 8 * 60 * 60 * 1000); // Adjust for GMT+8
           const year = now.getFullYear();
           const month = (now.getMonth() + 1).toString().padStart(2, '0');
           const day = now.getDate().toString().padStart(2, '0');
-          const hours = now.getHours().toString().padStart(2, '0');
+          const hours = (now.getHours() + 8).toString().padStart(2, '0'); // Adjust for GMT+8
           const minutes = now.getMinutes().toString().padStart(2, '0');
           const seconds = now.getSeconds().toString().padStart(2, '0');
-          const logKey = `log-${year}${month}${day}${hours}${minutes}${seconds}`;
+          const logKey = `${year}.${month}.${day}.${hours}.${minutes}.${seconds}`;
+
 
           try {
             // 将 message 序列化为 JSON 字符串
@@ -90,14 +91,14 @@ async function handleGetLogs(env) {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>日志</title>
+        <title>周报</title>
       </head>
       <body>
-        <h1>过去时间的日志记录</h1>
+        <h1>历史消息</h1>
         <table border="1">
           <tr>
             <th>时间</th>
-            <th>值</th>
+            <th>消息</th>
           </tr>
           ${logs.map(log => `
             <tr>
