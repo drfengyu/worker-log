@@ -85,11 +85,42 @@ async function handleGetLogs(env) {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>动态</title>
+        <title>历史消息</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+          }
+          h1 {
+            color: #333;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+          }
+          th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+          }
+          th {
+            background-color: #f2f2f2;
+            color: #333;
+          }
+          tr:nth-child(even) {
+            background-color: #f9f9f9;
+          }
+          tr:hover {
+            background-color: #ddd;
+          }
+        </style>
       </head>
       <body>
         <h1>历史消息</h1>
-        <table border="1">
+        <table>
           <tr>
             <th>时间</th>
             <th>消息</th>
