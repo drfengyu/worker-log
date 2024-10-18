@@ -17,7 +17,7 @@ export default {
             return await handleGetLogs(env);
           }
       if (clonedRequest.method === 'POST') {
-        const requestBody = await clonedRequest.json();
+        const requestBody = await clonedRequest.text();
         const aimodel=requestBody.model;
         logKey=`${year}.${month}.${day}.${hours}.${minutes}.${seconds}.${aimodel}`;
         console.log(requestBody);
