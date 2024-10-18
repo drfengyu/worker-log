@@ -13,7 +13,7 @@ export default {
         if (requestBody != null && requestBody.messages != null) {
           // 提取 message 字段
           const message = requestBody.messages;
-          
+          last_user_message = message[-1]['content'] if message[-1]['role'] == 'user' else None
           // 使用当前时间作为键
           const now = new Date();
           const year = now.getFullYear();
@@ -26,7 +26,7 @@ export default {
 
           try {
             // 将 message 序列化为 JSON 字符串
-            const messageString = JSON.stringify(message);
+            const messageString = JSON.stringify(last_user_message);
             console.log(`${messageString}`);
             // 使用 Cloudflare Workers 的 KV API 直接存储 message 值
             await env.WORKER_LOG.put(logKey, messageString, { expirationTtl: 60 * 60 * 24 * 7 });
