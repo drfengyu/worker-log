@@ -13,7 +13,7 @@ export default {
         if (requestBody != null && requestBody.messages != null) {
           const lastMessage = requestBody.messages[requestBody.messages.length - 1];
           console.log(lastMessage);
-          const last_user_message=null;
+          let last_user_message = null;
           if (lastMessage && lastMessage.role === 'user') {
             last_user_message = lastMessage.content;
           } else {
