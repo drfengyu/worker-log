@@ -34,8 +34,11 @@ export default {
             const messageString = JSON.stringify(last_user_message);
             console.log(`${messageString}`);
             // 使用 Cloudflare Workers 的 KV API 直接存储 message 值
-            await env.WORKER_LOG.put(logKey, messageString, { expirationTtl: 60 * 60 * 24 * 7 });
-            console.log('Message stored successfully');
+            if(messageString){
+              await env.WORKER_LOG.put(logKey, messageString, { expirationTtl: 60 * 60 * 24 * 7 });
+              console.log('Message Requested successfully');
+            }
+            
           } catch (error) {
             console.error(`Error storing message in KV: ${error.message}`);
           }
@@ -54,7 +57,10 @@ export default {
     // const responseBody = await response.json();
     const fullText = parseMessage(responseBody);
     console.log(fullText); // 打印获取的内容
-    await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });    
+    if(messageString){
+      await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });
+      console.log('Message Responsed successfully');
+        }
     // 返回原始响应
     return response;
     } catch (error) {
