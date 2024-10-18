@@ -43,7 +43,7 @@ export default {
 
     try {
       const response = await fetch(request);
-      console.log(`${JSON.stringify(response)}`);
+      console.log(`${JSON.stringify(response.json())}`);
       return response;
     } catch (error) {
       console.error(`Fetch error: ${error.message}`);
