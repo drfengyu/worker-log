@@ -145,17 +145,19 @@ async function handleGetLogs(env) {
   }
 }
 
-// 处理消息
 function parseMessage(msg) {
   const lines = msg.split('\n'); // 按行分割
   const result = [];
 
   for (let line of lines) {
-    if (line.startsWith('data: ')) { // 只处理以 data: 开头的行
-      const content = line.substring(6).replace(/\"/g, '').replace('stop',''); // 去掉前缀和引号
-      result.push(content); // 将内容添加到结果数组
+    if (line.startsWith('data: ')) { 
+      const content = line.substring(6)
+        .replace(/\\/g, '') // 移除转义符
+        .replace(/\"/g, '') // 移除引号
+        .replace('stop', ''); // 移除 'stop'
+      result.push(content);
     }
   }
 
-  return result.join(''); // 将数组中的内容连接成字符串
+  return result.join('\n'); // 保持换行符
 }
