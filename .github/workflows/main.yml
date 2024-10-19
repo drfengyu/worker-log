@@ -1,0 +1,32 @@
+name: Deploy Cloudflare Worker
+
+on:
+  push:
+    branches:
+      - main  # 触发工作流的分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # 或您需要的版本
+
+      - name: Install Wrangler
+        run: npm install -g wrangler
+
+      - name: Publish Worker
+        env:
+          WORKER_NAME: ${{ secrets.WORKER_NAME }}
+          WORKER_MAIN: ${{ secrets.WORKER_MAIN }}
+          WORKER_COMPATIBILITY_DATE: ${{ secrets.WORKER_COMPATIBILITY_DATE }}
+          WORKER_ROUTE_PATTERN: ${{ secrets.WORKER_ROUTE_PATTERN }}
+          WORKER_ZONE_NAME: ${{ secrets.WORKER_ZONE_NAME }}
+          WORKER_KV_ID: ${{ secrets.WORKER_KV_ID }}
+        run: wrangler publish
