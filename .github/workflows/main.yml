@@ -27,11 +27,19 @@ jobs:
           echo "main = \"${{ secrets.WORKER_MAIN }}\"" >> wrangler.toml
           echo "compatibility_date = \"${{ secrets.WORKER_COMPATIBILITY_DATE }}\"" >> wrangler.toml
           echo "route = { pattern = \"${{ secrets.WORKER_ROUTE_PATTERN }}\", zone_name = \"${{ secrets.WORKER_ZONE_NAME }}\" }" >> wrangler.toml
-          echo "[kv_namespaces]" >> wrangler.toml
+          echo "kv_namespaces = [" >> wrangler.toml
           echo "  { binding = \"WORKER_LOG\", id = \"${{ secrets.WORKER_KV_ID }}\" }" >> wrangler.toml
+          echo "]" >> wrangler.toml
           echo "[observability]" >> wrangler.toml
           echo "enabled = true" >> wrangler.toml
           echo "head_sampling_rate = 1" >> wrangler.toml
+
+      - name: Check wrangler.toml
+        run: cat wrangler.toml  # Optional: Check the contents of the generated file.
+
+      - name: Deploy Worker
+        run: wrangler deploy
+
 
       - name: Deploy Worker
         run: wrangler deploy
