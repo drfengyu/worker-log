@@ -34,13 +34,7 @@ jobs:
           echo "enabled = true" >> wrangler.toml
           echo "head_sampling_rate = 1" >> wrangler.toml
 
-      - name: Check wrangler.toml
-        run: cat wrangler.toml  # Optional: Check the contents of the generated file.
-
       - name: Deploy Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: wrangler deploy
-
-
-      - name: Deploy Worker
-        run: wrangler deploy
-
