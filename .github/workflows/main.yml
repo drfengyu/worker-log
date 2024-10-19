@@ -21,12 +21,17 @@ jobs:
       - name: Install Wrangler
         run: npm install -g wrangler
 
-      - name: Publish Worker
-        env:
-          WORKER_NAME: ${{ secrets.WORKER_NAME }}
-          WORKER_MAIN: ${{ secrets.WORKER_MAIN }}
-          WORKER_COMPATIBILITY_DATE: ${{ secrets.WORKER_COMPATIBILITY_DATE }}
-          WORKER_ROUTE_PATTERN: ${{ secrets.WORKER_ROUTE_PATTERN }}
-          WORKER_ZONE_NAME: ${{ secrets.WORKER_ZONE_NAME }}
-          WORKER_KV_ID: ${{ secrets.WORKER_KV_ID }}
-        run: wrangler publish
+      - name: Generate wrangler.toml
+        run: |
+          echo "name = \"${{ secrets.WORKER_NAME }}\"" >> wrangler.toml
+          echo "main = \"${{ secrets.WORKER_MAIN }}\"" >> wrangler.toml
+          echo "compatibility_date = \"${{ secrets.WORKER_COMPATIBILITY_DATE }}\"" >> wrangler.toml
+          echo "route = { pattern = \"${{ secrets.WORKER_ROUTE_PATTERN }}\", zone_name = \"${{ secrets.WORKER_ZONE_NAME }}\" }" >> wrangler.toml
+          echo "[kv_namespaces]" >> wrangler.toml
+          echo "  { binding = \"WORKER_LOG\", id = \"${{ secrets.WORKER_KV_ID }}\" }" >> wrangler.toml
+          echo "[observability]" >> wrangler.toml
+          echo "enabled = true" >> wrangler.toml
+          echo "head_sampling_rate = 1" >> wrangler.toml
+
+      - name: Deploy Worker
+        run: wrangler deploy
