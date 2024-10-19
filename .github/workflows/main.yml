@@ -23,7 +23,7 @@ jobs:
 
       - name: Generate wrangler.toml
         run: |
-          echo "name = \"${{ secrets.WORKER_NAME }}\"" >> wrangler.toml
+          echo "name = \"${{ secrets.WORKER_NAME }}\"" > wrangler.toml
           echo "main = \"${{ secrets.WORKER_MAIN }}\"" >> wrangler.toml
           echo "compatibility_date = \"${{ secrets.WORKER_COMPATIBILITY_DATE }}\"" >> wrangler.toml
           echo "route = { pattern = \"${{ secrets.WORKER_ROUTE_PATTERN }}\", zone_name = \"${{ secrets.WORKER_ZONE_NAME }}\" }" >> wrangler.toml
@@ -35,3 +35,4 @@ jobs:
 
       - name: Deploy Worker
         run: wrangler deploy
+
