@@ -55,7 +55,7 @@ export default {
     // 或者，如果你期望获取 JSON 数据，可以使用
     const responseBody = await responseClone.text();
     console.log(responseBody); // 打印获取的内容
-    const fullText = convertToMarkdown(responseBody);
+    const fullText = extractMarkdown(responseBody);
     if(fullText){
       //console.log(fullText); // 打印获取的内容
       await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });
@@ -146,29 +146,20 @@ async function handleGetLogs(env) {
   }
 }
 
-function convertToMarkdown(message) {
-  const lines = message.split('\n');
-  let markdownText = '';
+function extractMarkdown(message) {
+    // 将 message 按照换行符分割成数组
+    const lines = message.split('\n');
+    let markdownText = '';
 
-  lines.forEach(line => {
-    if (line.startsWith('id:')) {
-      // Remove the ID part
-      const text = line.split('data: ')[1];
-      if (text !== undefined) {
-        // Escape backslashes and add a code block for URLs
-        const escapedText = text.replace(/\\/g, '\\\\').replace(/https?:\/\/[\w.-\/]+/g, '[URL](https://$&)');
-        markdownText += escapedText + '\n';
-      }
-    } else if (line.startsWith('###')) {
-      markdownText += '### ' + line.slice(3).trim() + '\n';
-    } else if (line.startsWith('####')) {
-      markdownText += '#### ' + line.slice(4).trim() + '\n';
-    } else if (line.startsWith('```')) {
-      markdownText += line + '\n';
-    } else if (line.trim() !== '') {
-      markdownText += line.trim() + '\n';
+    // 遍历每一行
+    for (let line of lines) {
+        // 检查当前行是否以 "event: text" 开头
+        if (line.startsWith('event: text')) {
+            // 提取 data 部分并添加到 markdownText
+            const dataLine = line.replace('event: text', '').trim().replace('data: ', '');
+            markdownText += dataLine + '\n'; // 添加换行符
+        }
     }
-  });
 
-  return markdownText;
+    return markdownText.trim(); // 去掉最后的换行符
 }
