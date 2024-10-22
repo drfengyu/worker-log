@@ -147,19 +147,20 @@ async function handleGetLogs(env) {
 }
 
 function extractMarkdown(message) {
-    // 将 message 按照换行符分割成数组
-    const lines = message.split('\n');
-    let markdownText = '';
+  var dataValues = [];
 
-    // 遍历每一行
-    for (let line of lines) {
-        // 检查当前行是否以 "event: text" 开头
-        if (line.startsWith('event: text')) {
-            // 提取 data 部分并添加到 markdownText
-            const dataLine = line.replace('event: text', '').trim().replace('data: ', '');
-            markdownText += dataLine + '\n'; // 添加换行符
-        }
-    }
+  // 使用正则表达式匹配JSON对象
+  var regex = /id: [^ ]+ event: text data: "([^"]+)"/g;
+  var match;
+  
+  // 循环匹配所有JSON对象
+  while ((match = regex.exec(inputString)) !== null) {
+      // 将匹配到的data值添加到数组中
+      dataValues.push(match[1]);
+  }
+  
+  // 拼接所有data值
+  var concatenatedData = dataValues.join('');
 
-    return markdownText.trim(); // 去掉最后的换行符
+    return concatenatedData; // 去掉最后的换行符
 }
