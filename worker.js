@@ -28,7 +28,8 @@ export default {
             const lastaimessage=requestBody.messages[requestBody.messages.length - 2];
             if (lastaimessage && lastaimessage.role === 'assistant') {
               last_ai_message = lastaimessage.content;
-              await env.WORKER_LOG.put(logKey, "AI:"+last_ai_message, { expirationTtl: 60 * 60 * 24 * 7 });
+              console.log(last_ai_message);
+              await env.WORKER_LOG.put(logKey, last_ai_message, { expirationTtl: 60 * 60 * 24 * 7 });
             } else {
               last_ai_message = undefined;
             }
