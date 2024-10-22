@@ -23,7 +23,18 @@ export default {
         console.log(requestBody);
         if (requestBody != null && requestBody.messages != null) {
           const lastMessage = requestBody.messages[requestBody.messages.length - 1];
+          let last_ai_message=null;
+          if(requestBody.messages.length>=2){
+            const lastaimessage=requestBody.messages[requestBody.messages.length - 2];
+            if (lastaimessage && lastaimessage.role === 'assistant') {
+              last_ai_message = lastaimessage.content;
+              await env.WORKER_LOG.put(logKey, "AI:"+last_ai_message, { expirationTtl: 60 * 60 * 24 * 7 });
+            } else {
+              last_ai_message = undefined;
+            }
+          }
           let last_user_message = null;
+          
           if (lastMessage && lastMessage.role === 'user') {
             last_user_message = lastMessage.content;
           } else {
@@ -51,16 +62,16 @@ export default {
 
       try {
     const response = await fetch(request);
-    const responseClone = response.clone(); 
+    //const responseClone = response.clone(); 
     // 或者，如果你期望获取 JSON 数据，可以使用
-    const responseBody = await responseClone.text();
-    console.log(responseBody); // 打印获取的内容
-    const fullText = extractMarkdown(responseBody);
-    if(fullText){
+    //const responseBody = await responseClone.text();
+    //console.log(responseBody); // 打印获取的内容
+    //const fullText = extractMarkdown(responseBody);
+    //if(fullText){
       //console.log(fullText); // 打印获取的内容
-      await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });
-      console.log('Message Responsed successfully');
-        }
+      //await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });
+      //console.log('Message Responsed successfully');
+        //}
     // 返回原始响应
     return response;
     } catch (error) {
