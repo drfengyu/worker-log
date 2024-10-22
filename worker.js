@@ -154,7 +154,7 @@ function extractMarkdown(message) {
   var match;
   
   // 循环匹配所有JSON对象
-  while ((match = regex.exec(inputString)) !== null) {
+  while ((match = regex.exec(message)) !== null) {
       // 将匹配到的data值添加到数组中
       dataValues.push(match[1]);
   }
