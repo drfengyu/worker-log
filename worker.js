@@ -147,8 +147,7 @@ async function handleGetLogs(env) {
 }
 
 function convertToMarkdown(message) {
-  const { message: messageContent } = message.$cloudflare.$metadata;
-  const lines = messageContent.split('\n');
+  const lines = message.split('\n');
   let markdownText = '';
 
   lines.forEach(line => {
