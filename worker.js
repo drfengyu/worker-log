@@ -55,7 +55,7 @@ export default {
     // 或者，如果你期望获取 JSON 数据，可以使用
     const responseBody = await responseClone.text();
     console.log(responseBody); // 打印获取的内容
-    const fullText = generateMarkdownFromMessage(responseBody);
+    const fullText = convertToMarkdown(responseBody);
     if(fullText){
       //console.log(fullText); // 打印获取的内容
       await env.WORKER_LOG.put(logKey, fullText, { expirationTtl: 60 * 60 * 24 * 7 });
@@ -146,25 +146,28 @@ async function handleGetLogs(env) {
   }
 }
 
-function generateMarkdownFromMessage(message) {
-    // 使用正则表达式匹配所有 event 为 text 的 data 值
-    const regex = /event: text\s*data: "(.*?)"/g;
-    let match;
-    let result = [];
+function convertToMarkdown(message) {
+  const lines = message.split('\n');
+  let markdownText = '';
 
-    // 循环提取所有匹配的内容
-    while ((match = regex.exec(message)) !== null) {
-        // 替换换行符和引号，并去掉多余空格
-        const cleanedData = match[1]
-            .replace(/\\n/g, '\n') // 替换换行符
-            .replace(/\\\"/g, '"') // 替换引号
-            .replace(/^\s+|\s+$/g, '') // 去掉首尾空格
-            .replace(/\s+/g, ' '); // 将多个空格替换为一个空格
-        result.push(cleanedData);
+  lines.forEach(line => {
+    if (line.startsWith('id:')) {
+      // Remove the ID part
+      const text = line.split('data: ')[1];
+      // Escape backslashes and add a code block for URLs
+      const escapedText = text.replace(/\\/g, '\\\\').replace(/https?:\/\/[\w.-\/]+/g, '[URL](https://$&)');
+      markdownText += escapedText + '\n';
+    } else if (line.startsWith('###')) {
+      markdownText += '### ' + line.slice(3).trim() + '\n';
+    } else if (line.startsWith('####')) {
+      markdownText += '#### ' + line.slice(4).trim() + '\n';
+    } else if (line.startsWith('```')) {
+      markdownText += line + '\n';
+    } else if (line.trim() !== '') {
+      markdownText += line.trim() + '\n';
     }
+  });
 
-    // 拼接成 Markdown 格式的文本
-    const markdownText = result.join('\n'); // 每个段落之间加两个换行
-    return markdownText;
+  return markdownText;
 }
 
