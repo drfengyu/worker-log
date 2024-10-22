@@ -147,16 +147,19 @@ async function handleGetLogs(env) {
 }
 
 function convertToMarkdown(message) {
-  const lines = message.split('\n');
+  const { message: messageContent } = message.$cloudflare.$metadata;
+  const lines = messageContent.split('\n');
   let markdownText = '';
 
   lines.forEach(line => {
     if (line.startsWith('id:')) {
       // Remove the ID part
-      let text = line.split('data: ')[1];
-      // Escape backslashes and add a code block for URLs
-      let escapedText = text.replace(/\\/g, '\\\\').replace(/https?:\/\/[\w.-\/]+/g, '[URL](https://$&)');
-      markdownText += escapedText + '\n';
+      const text = line.split('data: ')[1];
+      if (text !== undefined) {
+        // Escape backslashes and add a code block for URLs
+        const escapedText = text.replace(/\\/g, '\\\\').replace(/https?:\/\/[\w.-\/]+/g, '[URL](https://$&)');
+        markdownText += escapedText + '\n';
+      }
     } else if (line.startsWith('###')) {
       markdownText += '### ' + line.slice(3).trim() + '\n';
     } else if (line.startsWith('####')) {
@@ -170,4 +173,3 @@ function convertToMarkdown(message) {
 
   return markdownText;
 }
-
