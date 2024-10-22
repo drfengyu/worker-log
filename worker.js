@@ -153,9 +153,9 @@ function convertToMarkdown(message) {
   lines.forEach(line => {
     if (line.startsWith('id:')) {
       // Remove the ID part
-      const text = line.split('data: ')[1];
+      let text = line.split('data: ')[1];
       // Escape backslashes and add a code block for URLs
-      const escapedText = text.replace(/\\/g, '\\\\').replace(/https?:\/\/[\w.-\/]+/g, '[URL](https://$&)');
+      let escapedText = text.replace(/\\/g, '\\\\').replace(/https?:\/\/[\w.-\/]+/g, '[URL](https://$&)');
       markdownText += escapedText + '\n';
     } else if (line.startsWith('###')) {
       markdownText += '### ' + line.slice(3).trim() + '\n';
