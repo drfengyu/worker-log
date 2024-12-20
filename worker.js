@@ -29,7 +29,7 @@ export default {
             if (lastaimessage && lastaimessage.role === 'assistant') {
               last_ai_message = lastaimessage.content;
               console.log(last_ai_message);
-              await env.WORKER_LOG.put(`${logKey}.AI`, last_ai_message, { expirationTtl: 60 * 60 * 24 * 2 });
+              await env.WORKER_LOG.put(`${logKey}.AI`, last_ai_message, { expirationTtl: 60 * 60 * 24 * 14 });
             } else {
               last_ai_message = undefined;
             }
@@ -47,7 +47,7 @@ export default {
             //console.log(`${last_user_message}`);
             // 使用 Cloudflare Workers 的 KV API 直接存储 message 值
             if(last_user_message){
-              await env.WORKER_LOG.put(logKey, last_user_message, { expirationTtl: 60 * 60 * 24 * 2 });
+              await env.WORKER_LOG.put(logKey, last_user_message, { expirationTtl: 60 * 60 * 24 * 14 });
               console.log('Message Requested successfully');
             }
             
